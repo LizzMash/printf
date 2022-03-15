@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
-/*
+/**
  * struct typeprint - create libraries
  * @typec: char
  * @fun: point void of lista
