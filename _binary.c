@@ -1,6 +1,6 @@
 #include "main.h"
 #include <stdarg.h>
-/*
+/**
  * printBinary - Print number binary
  * @lista: List elemnts
  * Return: contador
