@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <stdlib.h>
-/*
+/**
  * printOctal - Print Octal
  * @lista: Var list
  * Return: number u
