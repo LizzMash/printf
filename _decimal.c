@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
-/**
+/*
  * printDecimal - Print Decimal
  * @lista: Var list
  * Return: number decimal

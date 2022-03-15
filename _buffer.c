@@ -1,5 +1,5 @@
 #include "main.h"
-/**
+/*
  * _littleBuffer - Buffer
  * @size: Size
  * Return: Char *

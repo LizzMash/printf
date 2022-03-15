@@ -1,5 +1,5 @@
 #include "main.h"
-/**
+/*
  * printString - Print String
  * @lista: Var list
  * Return: 0

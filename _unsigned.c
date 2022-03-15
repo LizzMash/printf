@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <stdlib.h>
-/**
+/*
  * printUnsigned - Print Unsigned
  * @lista: Var list
  * Return: number u
