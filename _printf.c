@@ -1,90 +1,75 @@
 #include "main.h"
-
-void cleanup(va_list args, buffer_t *output);
-int run_printf(const char *format, va_list args, buffer_t *output);
-int _printf(const char *format, ...);
-
 /**
- * cleanup - Peforms cleanup operations for _printf.
- * @args: A va_list of arguments provided to _printf.
- * @output: A buffer_t struct.
- */
-void cleanup(va_list args, buffer_t *output)
+ * opFunction - Second function for _printf
+ * @cont: Contador
+ * @list: Lista arguments
+ * @tipos: Tipos que nos trae el JSON
+ * @format: Formato
+ * Return: Len
+*/
+int opFunction(int cont, va_list list, typedate tipos[], const char *format)
 {
-	va_end(args);
-	write(1, output->start, output->len);
-	free_buffer(output);
-}
-
-/**
- * run_printf - Reads through the format string for _printf.
- * @format: Character string to print - may contain directives.
- * @output: A buffer_t struct containing a buffer.
- * @args: A va_list of arguments.
- *
- * Return: The number of characters stored to output.
- */
-int run_printf(const char *format, va_list args, buffer_t *output)
+int i = 0, j = 0, band = 0, spaces = 0;
+while (format && format[i])
 {
-	int i, wid, prec, ret = 0;
-	char tmp;
-	unsigned char flags, len;
-	unsigned int (*f)(va_list, buffer_t *,
-			unsigned char, int, int, unsigned char);
-
-	for (i = 0; *(format + i); i++)
+	band = 0;
+	if (format[i] == '%' && format[i + 1] == '\0')
+	return (-1);
+	else if (format[i] == '%' && format[i + 1] != '%')
 	{
-		len = 0;
-		if (*(format + i) == '%')
+		for (j = 0; j < 7; j++)
 		{
-			tmp = 0;
-			flags = handle_flags(format + i + 1, &tmp);
-			wid = handle_width(args, format + i + tmp + 1, &tmp);
-			prec = handle_precision(args, format + i + tmp + 1,
-					&tmp);
-			len = handle_length(format + i + tmp + 1, &tmp);
-
-			f = handle_specifiers(format + i + tmp + 1);
-			if (f != NULL)
+			if (format[i] == '%' && format[i + spaces + 1] == tipos[j].typec)
 			{
-				i += tmp + 1;
-				ret += f(args, output, flags, wid, prec, len);
-				continue;
-			}
-			else if (*(format + i + tmp + 1) == '\0')
-			{
-				ret = -1;
-				break;
+				cont += tipos[j].fun(list);
+				i += spaces + 1;
+				band = 1;
 			}
 		}
-		ret += _memcpy(output, (format + i), 1);
-		i += (len != 0) ? 1 : 0;
-	}
-	cleanup(args, output);
-	return (ret);
-}
+		if (band == 0 && format[i + 2] != '\n')
+		{
+			_putchar(format[i]);
+			cont++;
 
+		}
+		else if (band == 0 && format[i + 2] == '\n')
+		{
+			_putchar(format[i]);
+			cont++;
+		}
+	}
+	else if (format[i] == '%' && format[i + 1] == '%')
+	{
+		i += _putchar('%');
+		cont += 1;
+	}
+	else
+		cont += _putchar(format[i]);
+	i++;
+}
+	return (cont);
+}
 /**
- * _printf - Outputs a formatted string.
- * @format: Character string to print - may contain directives.
- *
- * Return: The number of characters printed.
+ * _printf - Printf!!
+ * @format: Format
+ * Return: len
  */
 int _printf(const char *format, ...)
 {
-	buffer_t *output;
-	va_list args;
-	int ret;
+typedate tipos[] = {
+	{'s', printString}, {'c', printChar}, {'i', printInteger},
+	{'d', printDecimal}, {'b', printBinary}, {'o', printOctal},
+	{'u', printUnsigned}
+};
+va_list list;
+int cont = -1;
 
-	if (format == NULL)
-		return (-1);
-	output = init_buffer();
-	if (output == NULL)
-		return (-1);
-
-	va_start(args, format);
-
-	ret = run_printf(format, args, output);
-
-	return (ret);
+if (format != NULL)
+{
+va_start(list, format);
+cont = 0;
+cont = opFunction(cont, list, tipos, format);
+va_end(list);
+}
+return (cont);
 }
